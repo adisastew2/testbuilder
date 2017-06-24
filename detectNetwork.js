@@ -24,9 +24,12 @@ var detectNetwork = function(cardNumber) {
 
   //Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
   var DPrefix = (cardNumber.substring(0,4) === '6011' || (Number(cardNumber.substring(0,3)) > 643 && Number(cardNumber.substring(0,3)) < 650) || cardNumber.substring(0,2) === '65');
-  var isD = DPrefix && cardNumber.length === 16 || cardNumber.length === 19;
-  //Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19
+  var isD = DPrefix && (cardNumber.length === 16 || cardNumber.length === 19);
 
+  //Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19
+  var MPrefix = (cardNumber.substring(0,4) === '5018' || cardNumber.substring(0,4) === '5020' || cardNumber.substring(0,4) === '5038' || cardNumber.substring(0,4) === '6304');
+  var isM = MPrefix && (cardNumber.length > 11 && cardNumber.length < 20);
+  
   if(isDC){
     return "Diner's Club";
   } else if (isAE){
@@ -37,7 +40,9 @@ var detectNetwork = function(cardNumber) {
     return 'MasterCard';
   } else if(isD){
     return 'Discover';
-  } 
+  } if(isM){
+    return 'Maestro';
+  }
 
 };
 
