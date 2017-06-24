@@ -29,6 +29,14 @@ var detectNetwork = function(cardNumber) {
   //Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19
   var MPrefix = (cardNumber.substring(0,4) === '5018' || cardNumber.substring(0,4) === '5020' || cardNumber.substring(0,4) === '5038' || cardNumber.substring(0,4) === '6304');
   var isM = MPrefix && (cardNumber.length > 11 && cardNumber.length < 20);
+
+  // China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+  var CPrefix = ((Number(cardNumber.substring(0,6)) > 622125 && Number(cardNumber.substring(0,6)) < 622926) || (Number(cardNumber.substring(0,3)) > 623 && Number(cardNumber.substring(0,3)) < 627) || (Number(cardNumber.substring(0,4)) > 6281 && Number(cardNumber.substring(0,4)) < 6289));
+  var isCU = CPrefix && (cardNumber.length > 15 && cardNumber.length < 20);
+
+  // Heads up! Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
+  // Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+
   
   if(isDC){
     return "Diner's Club";
@@ -40,8 +48,10 @@ var detectNetwork = function(cardNumber) {
     return 'MasterCard';
   } else if(isD){
     return 'Discover';
-  } if(isM){
+  } else if(isM){
     return 'Maestro';
+  } else if(isCU){
+    return 'China UnionPay';
   }
 
 };
